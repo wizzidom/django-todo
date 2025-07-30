@@ -6,5 +6,6 @@ from todos.models import Todo
 
 class TaskAdmin(admin.ModelAdmin):
     list_display = ('task', 'task_completed', 'updated_at')
+    search_fields = ('task',)
 
 admin.site.register(Todo,TaskAdmin)
