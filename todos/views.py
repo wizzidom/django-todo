@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 
 from todos.models import Todo
 
@@ -18,7 +18,7 @@ def addTask(request):
 #             try:
 #                 todo = Todo.objects.get(id=task_id)
 #                 todo.task_completed = True
-#                 todo.save()
+#                 todo.save()S
 #             except Todo.DoesNotExist:
 #                 pass
 #     return redirect('home')
@@ -29,12 +29,30 @@ def completedTask(request, pk):
     task.save()
     print(task.task_completed)
     return redirect('home')
-
+def UncompletedTask(request, pk):
+    task = get_object_or_404(Todo, pk = pk)
+    task.task_completed = False
+    task.save()
+    print(task.task_completed)
+ 
+    return redirect('home')
 def delete(request, pk):
     task = get_object_or_404(Todo, pk = pk)
     task.delete()
     return redirect('home')
+
+def edit_task(request, pk):
+    task = get_object_or_404(Todo, pk = pk)
+    if request.method == 'POST':
+        task.task = request.POST['task']
+        task.save()
+        return redirect('home')
+    else:
+        context = {
+            'task' : task
+        }
+    return render(request, 'edit_task.html', context)
    
 
-
+  
 
